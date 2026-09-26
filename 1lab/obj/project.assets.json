@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Viner\\Desktop\\GraphPlotter\\GraphPlotter.csproj",
+      "projectUniqueName": "C:\\Users\\Viner\\Desktop\\1lab\\GraphPlotter.csproj",
       "projectName": "GraphPlotter",
-      "projectPath": "C:\\Users\\Viner\\Desktop\\GraphPlotter\\GraphPlotter.csproj",
+      "projectPath": "C:\\Users\\Viner\\Desktop\\1lab\\GraphPlotter.csproj",
       "packagesPath": "C:\\Users\\Viner\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Viner\\Desktop\\GraphPlotter\\obj\\",
+      "outputPath": "C:\\Users\\Viner\\Desktop\\1lab\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

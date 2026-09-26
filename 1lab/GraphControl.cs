@@ -37,6 +37,9 @@ namespace GraphPlotter
         /// <summary>Табличные точки (x, y), отсортированные по x, либо null.</summary>
         public List<(double X, double Y)>? TablePoints { get; set; }
 
+        /// <summary>Выделенная отдельная точка (например, найденный корень уравнения), либо null.</summary>
+        public (double X, double Y)? MarkerPoint { get; set; }
+
         /// <summary>Текущий масштаб (пикселей на единицу).</summary>
         public double Scale => _scale;
 
@@ -97,6 +100,17 @@ namespace GraphPlotter
             _scale = Math.Min(scaleX, scaleY);
             _scale = Math.Max(MinScale, Math.Min(_scale, MaxScale));
 
+            Invalidate();
+            ViewChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>Центрирует вид на заданной мировой точке с заданным масштабом
+        /// (пикселей на единицу) — удобно, чтобы визуально показать точность найденного решения.</summary>
+        public void CenterAndZoom(double worldX, double worldY, double scale)
+        {
+            _centerX = worldX;
+            _centerY = worldY;
+            _scale = Math.Max(MinScale, Math.Min(scale, MaxScale));
             Invalidate();
             ViewChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -200,6 +214,9 @@ namespace GraphPlotter
 
             if (Function != null)
                 DrawFunction(g);
+
+            if (MarkerPoint != null)
+                DrawMarker(g, MarkerPoint.Value);
         }
 
         /// <summary>
@@ -385,6 +402,20 @@ namespace GraphPlotter
         {
             if (segment != null && segment.Count >= 2)
                 g.DrawLines(pen, segment.ToArray());
+        }
+
+        private void DrawMarker(Graphics g, (double X, double Y) point)
+        {
+            var sp = WorldToScreen(point.X, point.Y);
+            using var crossPen = new Pen(Color.FromArgb(0, 150, 60), 1.5f) { DashStyle = DashStyle.Dash };
+            g.DrawLine(crossPen, sp.X, 0, sp.X, Height);
+            g.DrawLine(crossPen, 0, sp.Y, Width, sp.Y);
+
+            using var outline = new Pen(Color.Black, 1.5f);
+            using var fill = new SolidBrush(Color.FromArgb(0, 180, 70));
+            const float r = 6f;
+            g.FillEllipse(fill, sp.X - r, sp.Y - r, 2 * r, 2 * r);
+            g.DrawEllipse(outline, sp.X - r, sp.Y - r, 2 * r, 2 * r);
         }
 
         private void DrawTablePoints(Graphics g)
